@@ -9,7 +9,7 @@ from tests.conftest import API_URL
 
 @allure.parent_suite('API')
 @allure.suite('Бронирование')
-@allure.title(f"Получение списка бронирования")
+@allure.title(f"Получение бронирования")
 @allure.severity('Major')
 def test_get_booking(get_booking_id):
     endpoint = '/booking/' + get_booking_id
