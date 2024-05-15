@@ -37,6 +37,11 @@
 
 ---
 
+#### Интеграция с Jira
+![This is an image](pictures/jira_api.png)
+
+---
+
 ### Уведомления в Телеграм
 
 ![telegram_notification](pictures/tg_notification.png)
