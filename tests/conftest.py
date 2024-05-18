@@ -6,7 +6,7 @@ import pytest
 
 from jsonschema.validators import validate
 
-from restful_booker.utils.request_helper import api_post
+from restful_booker.utils.request_helper import api_request
 from schemas.post_booking import new_booking
 
 
@@ -22,7 +22,7 @@ def create_token():
     }
 
     with allure.step('Создаём токен'):
-        response = api_post(endpoint, headers=headers, data=payload)
+        response = api_request(endpoint, method="POST", headers=headers, data=payload)
 
     with allure.step('Проверяем статус код ответа'):
         assert response.status_code == 200
@@ -55,7 +55,7 @@ def get_booking_id():
     })
 
     with allure.step('Выполняем запрос на создание бронирования'):
-        response = api_post(endpoint, headers=headers, data=payload)
+        response = api_request(endpoint, method="POST", headers=headers, data=payload)
 
     with allure.step('Проверяем статус код ответа'):
         assert response.status_code == 200

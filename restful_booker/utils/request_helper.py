@@ -16,48 +16,11 @@ load_dotenv()
 API_URL = os.getenv('API_URL')
 
 
-def api_get(endpoint, **kwargs):
+def api_request(endpoint, method, **kwargs):
     with step("API Request"):
-        response = requests.get(url=f"https://{API_URL}{endpoint}", **kwargs)
+        response = requests.request(method, url=f"https://{API_URL}{endpoint}", **kwargs)
         response_logging(response)
         response_attaching(response)
-
-    return response
-
-
-def api_post(endpoint, **kwargs):
-    with step("API Request"):
-        response = requests.post(url=f"https://{API_URL}{endpoint}", **kwargs)
-    response_logging(response)
-    response_attaching(response)
-
-    return response
-
-
-def api_patch(endpoint, **kwargs):
-    with step("API Request"):
-        response = requests.patch(url=f"https://{API_URL}{endpoint}", **kwargs)
-    response_logging(response)
-    response_attaching(response)
-
-    return response
-
-
-def api_put(endpoint, **kwargs):
-    with step("API Request"):
-        response = requests.put(url=f"https://{API_URL}{endpoint}", **kwargs)
-    response_logging(response)
-    response_attaching(response)
-
-    return response
-
-
-def api_delete(endpoint, **kwargs):
-    with step("API Request"):
-        response = requests.delete(url=f"https://{API_URL}{endpoint}", **kwargs)
-    response_logging(response)
-    response_attaching(response)
-
     return response
 
 
