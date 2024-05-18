@@ -19,8 +19,9 @@ API_URL = os.getenv('API_URL')
 def api_request(endpoint, method, **kwargs):
     with step("API Request"):
         response = requests.request(method, url=f"https://{API_URL}{endpoint}", **kwargs)
+        content = response.content
         response_logging(response)
-        response_attaching(response)
+        response_attaching(response, content)
     return response
 
 
@@ -33,13 +34,13 @@ def response_logging(response: Response):
     logging.info("Response: " + response.text)
 
 
-def response_attaching(response: Response):
+def response_attaching(response: Response, content):
     allure.attach(
         body=response.request.url,
         name="Request url",
         attachment_type=AttachmentType.TEXT,
     )
-    if str(response.content):
+    if isinstance(content, bytes):
         allure.attach(
             body=response.content,
             name="Response",
