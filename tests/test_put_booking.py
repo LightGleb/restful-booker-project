@@ -1,12 +1,11 @@
 import json
 
 import allure
-import requests
 from jsonschema.validators import validate
 
-from restful_booker.utils.attach import response_logging, response_attaching
+from restful_booker.utils.request_helper import api_put
 from schemas.put_booking import update_booking
-from tests.conftest import create_token, API_URL
+from tests.conftest import create_token
 
 
 @allure.parent_suite('API')
@@ -33,7 +32,7 @@ def test_put_booking(get_booking_id):
     }
 
     with allure.step('Выполняем запрос на обновление бронирования'):
-        response = requests.put(API_URL + endpoint, headers=headers, data=payload)
+        response = api_put(endpoint, headers=headers, data=payload)
     with allure.step('Проверяем статус код ответа'):
         assert response.status_code == 200
     with allure.step('Проверяем соответствие схеме'):
@@ -43,5 +42,3 @@ def test_put_booking(get_booking_id):
         body = response.json()
         payload_dict = json.loads(payload)
         assert payload_dict["lastname"] == body["lastname"]
-    response_logging(response)
-    response_attaching(response)

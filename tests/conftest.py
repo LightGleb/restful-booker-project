@@ -3,17 +3,11 @@ import os
 
 import allure
 import pytest
-import requests
-from dotenv import load_dotenv
 
 from jsonschema.validators import validate
 
-from restful_booker.utils.attach import response_logging, response_attaching
+from restful_booker.utils.request_helper import api_post
 from schemas.post_booking import new_booking
-
-load_dotenv()
-
-API_URL = os.getenv('API_URL')
 
 
 def create_token():
@@ -28,7 +22,7 @@ def create_token():
     }
 
     with allure.step('Создаём токен'):
-        response = requests.post(API_URL + endpoint, headers=headers, data=payload)
+        response = api_post(endpoint, headers=headers, data=payload)
 
     with allure.step('Проверяем статус код ответа'):
         assert response.status_code == 200
@@ -49,8 +43,8 @@ def get_booking_id():
     }
 
     payload = json.dumps({
-        "firstname": "Jim",
-        "lastname": "Brown",
+        "firstname": "Super",
+        "lastname": "Man",
         "totalprice": 111,
         "depositpaid": True,
         "bookingdates": {
@@ -61,7 +55,7 @@ def get_booking_id():
     })
 
     with allure.step('Выполняем запрос на создание бронирования'):
-        response = requests.post(API_URL + endpoint, headers=headers, data=payload)
+        response = api_post(endpoint, headers=headers, data=payload)
 
     with allure.step('Проверяем статус код ответа'):
         assert response.status_code == 200
@@ -75,8 +69,5 @@ def get_booking_id():
         assert payload_dict["firstname"] == body["booking"]["firstname"]
 
     booking_id = str(body["bookingid"])
-
-    response_logging(response)
-    response_attaching(response)
 
     return booking_id
