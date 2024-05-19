@@ -1,3 +1,4 @@
+import mimetypes
 import os
 
 import requests
@@ -19,9 +20,9 @@ API_URL = os.getenv('API_URL')
 def api_request(endpoint, method, **kwargs):
     with step("API Request"):
         response = requests.request(method, url=f"https://{API_URL}{endpoint}", **kwargs)
-        content = response.content
+        content_type = response.headers.get('Content-Type')
         response_logging(response)
-        response_attaching(response, content)
+        response_attaching(response, content_type)
     return response
 
 
@@ -34,13 +35,13 @@ def response_logging(response: Response):
     logging.info("Response: " + response.text)
 
 
-def response_attaching(response: Response, content):
+def response_attaching(response: Response, content_type):
     allure.attach(
         body=response.request.url,
         name="Request url",
         attachment_type=AttachmentType.TEXT,
     )
-    if isinstance(content, bytes):
+    if mimetypes.guess_extension(content_type) == '.json':
         allure.attach(
             body=response.content,
             name="Response",
